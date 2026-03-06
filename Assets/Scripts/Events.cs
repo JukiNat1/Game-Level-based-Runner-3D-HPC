@@ -46,6 +46,10 @@ public class Events : MonoBehaviour
 
     public void UnhideScoreSaving()
     {
+        // Notify PauseManager this is a real Game Over (not a pause)
+        if (PauseManager.Instance != null)
+            PauseManager.Instance.ShowAsGameOver();
+
         playerNameInput.gameObject.SetActive(true);
         confirmPlayerNameBtn.gameObject.SetActive(true);
         skipSavingScoreBtn.gameObject.SetActive(true);

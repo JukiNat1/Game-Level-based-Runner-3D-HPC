@@ -13,6 +13,9 @@ public class SwipeManager : MonoBehaviour
     private void Update()
     {
         tap = swipeLeft = swipeRight = swipeUp = swipeDown = false;
+
+        // Skip input while the game is paused
+        if (PauseManager.isPaused) return;
         #region Standalone Inputs
         if (Input.GetMouseButtonDown(0))
         {

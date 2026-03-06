@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     public float jumpForce;
     public float gravity;
 
+    [Header("Debug / Test")]
+    public bool invincible = false; // Enable to make the player immune to obstacles (for testing)
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -30,8 +33,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!PlayerManager.isGameStarted)
-            return;
+        if (!PlayerManager.isGameStarted) return;
+        if (PauseManager.isPaused) return;  // Skip input processing while paused
 
         //speed increase over time
         IncreaseSpeed();
@@ -135,6 +138,8 @@ public class PlayerController : MonoBehaviour
     {
         if (hit.transform.tag == "Obstacle")
         {
+            if (invincible) return; // Invincible mode: ignore collision during testing
+
             var am = FindObjectOfType<AudioManager>();
             am.PlaySound("Crash");
             StartCoroutine(AudioManager.FadeOut(am.GetComponent<AudioSource>(), 2, 0.0f));
