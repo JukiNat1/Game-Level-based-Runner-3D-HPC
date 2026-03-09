@@ -28,6 +28,7 @@ public class PlayerManager : MonoBehaviour
 
     private static string playerName;
     bool alreadyDone = false;
+    private GameObject instructionGO;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +56,41 @@ public class PlayerManager : MonoBehaviour
         // Hide hamburger button initially (game not started yet)
         if (hamburgerButton != null)
             hamburgerButton.SetActive(false);
+
+        CreateInstructionUI();
+    }
+
+    private void CreateInstructionUI()
+    {
+        Canvas canvas = FindObjectOfType<Canvas>();
+        if (canvas == null) return;
+
+        instructionGO = new GameObject("InstructionText");
+        instructionGO.transform.SetParent(canvas.transform, false);
+
+        Text txt = instructionGO.AddComponent<Text>();
+        txt.text = "CÁCH CHƠI:\n\n💻 PC:\n- Chuyển làn: A / D / ◄ / ►\n- Nhảy: W / ▲\n- Đáp nhanh: S / ▼\n\n📱 Mobile:\n- Vuốt Trái / Phải\n- Vuốt Lên (Nhảy)\n- Vuốt Xuống (Đáp nhanh)";
+        
+        // Load default Unity font (LegacyRuntime)
+        txt.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+
+        txt.fontSize = 26;
+        txt.color = Color.yellow;
+        txt.alignment = TextAnchor.MiddleLeft;
+        txt.horizontalOverflow = HorizontalWrapMode.Wrap;
+
+        // Add shadow/outline for readability
+        Outline outline = instructionGO.AddComponent<Outline>();
+        outline.effectColor = Color.black;
+        outline.effectDistance = new Vector2(2, -2);
+
+        // Position on the left middle
+        RectTransform rt = instructionGO.GetComponent<RectTransform>();
+        rt.anchorMin = new Vector2(0, 0.5f);
+        rt.anchorMax = new Vector2(0, 0.5f);
+        rt.pivot = new Vector2(0, 0.5f);
+        rt.anchoredPosition = new Vector2(50, -120); // Moved further down to prevent overlap with sound button
+        rt.sizeDelta = new Vector2(400, 400);
     }
 
     // Update is called once per frame
@@ -174,6 +210,7 @@ public class PlayerManager : MonoBehaviour
                 isGameStarted = true;
 
                 Destroy(startingText);
+                if (instructionGO != null) Destroy(instructionGO);
             }
         }
     }

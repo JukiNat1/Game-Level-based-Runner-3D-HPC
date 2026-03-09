@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     public float jumpForce;
     public float gravity;
+    public float dropForce = -40f; // Force applied when quick-dropping mid-air
 
     [Header("Debug / Test")]
     public bool invincible = false; // Enable to make the player immune to obstacles (for testing)
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
         direction.z = forwardSpeed;
         
         PerformJump();
+        PerformDrop();
         PerformTurn();
 
         //Calculate where we should be next
@@ -109,13 +111,31 @@ public class PlayerController : MonoBehaviour
     {
         if (controller.isGrounded)
         {
-            // W or Space or up arrow
+            // W, Space, or up arrow to jump
             if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.Space) || SwipeManager.swipeUp)
                 Jump();
         }
         else
         {
             direction.y += gravity * Time.deltaTime;
+        }
+    }
+
+    /// <summary>
+    /// Quick-drop: while airborne, S / Down Arrow / swipe-down slams the player
+    /// straight to the ground instantly (Subway Surfers style).
+    /// </summary>
+    private void PerformDrop()
+    {
+        if (controller.isGrounded) return; // Already on ground, nothing to do
+
+        bool dropInput = Input.GetKeyDown(KeyCode.S)
+                      || Input.GetKeyDown(KeyCode.DownArrow)
+                      || SwipeManager.swipeDown;
+
+        if (dropInput)
+        {
+            direction.y = dropForce; // Large negative velocity snaps player to ground immediately
         }
     }
 

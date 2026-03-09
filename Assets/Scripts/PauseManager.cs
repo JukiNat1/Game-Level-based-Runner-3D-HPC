@@ -28,6 +28,9 @@ public class PauseManager : MonoBehaviour
     [Header("Nút Hamburger (HUD - hiện khi đang chơi)")]
     public Button hamburgerButton;          // Hamburger button shown on HUD while playing
 
+    [Header("Nút bật/tắt âm thanh (trong Settings Panel)")]
+    public Button soundOnOffBtn;            // Drag SoundOnOffBtn here in Inspector
+
     [Header("Settings Panel (tuỳ chọn)")]
     public GameObject settingsPanel;        // Settings panel (if any)
 
@@ -45,6 +48,10 @@ public class PauseManager : MonoBehaviour
         Instance = this;
 
         isPaused = false;
+
+        // Register the sound button with AudioManager so it can update the icon
+        if (AudioManager.Instance != null && soundOnOffBtn != null)
+            AudioManager.Instance.RegisterSoundButton(soundOnOffBtn);
 
         if (pausePanel != null)
             pausePanel.SetActive(false);

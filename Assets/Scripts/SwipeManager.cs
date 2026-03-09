@@ -3,6 +3,7 @@
 //using UnityEditor.PackageManager.Requests;
 //using static UnityEditor.EditorApplication;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SwipeManager : MonoBehaviour
 {
@@ -19,9 +20,13 @@ public class SwipeManager : MonoBehaviour
         #region Standalone Inputs
         if (Input.GetMouseButtonDown(0))
         {
-            tap = true;
-            isDraging = true;
-            startTouch = Input.mousePosition;
+            // Ignore clicks on UI elements (e.g. SoundOnOffBtn, hamburger button)
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                tap = true;
+                isDraging = true;
+                startTouch = Input.mousePosition;
+            }
         }
         else if (Input.GetMouseButtonUp(0))
         {

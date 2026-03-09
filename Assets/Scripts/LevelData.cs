@@ -28,7 +28,7 @@ public static class LevelData
     /// <summary>
     /// Khoảng cách tương đương (m) cho mỗi màn.
     /// </summary>
-    public static readonly int[] DistanceMeters = { 500, 1000, 1500, 2000, 2500, 3000 };
+    public static readonly int[] DistanceMeters = { 510, 990, 1500, 2010, 2490, 3000 };
 
     /// <summary>
     /// Mô tả độ khó.
